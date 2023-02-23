@@ -33,4 +33,34 @@ SELECT
 FROM mydb.cats INNER JOIN mydb.servants
 ON mydb.cats.id = mydb.servants.cats_id
 #WHERE cat_name = "Grizabella"
-#WHERE servant_name = "Patrick";
+WHERE servant_name = "Patrick";
+
+-- Inner Join / Dienstzeit
+SELECT
+	servant_name AS Diener,
+    yrs_served AS Dienstzeit
+FROM mydb.cats INNER JOIN mydb.servants
+ON mydb.cats.id = mydb.servants.cats_id;
+
+-- 1. LIMIT (QUICK & DIRTY / Nur bei einem MAX-Wert vollständige Lösung)
+SELECT
+	servant_name AS Diener,
+    yrs_served AS Dienstzeit,
+    CONCAT(servant_name, " der Diener von ", cat_name, " - ist der Diener mit der längsten Dienstzeit.") AS Dienstzeit
+FROM mydb.cats INNER JOIN mydb.servants
+ON mydb.cats.id = mydb.servants.cats_id
+ORDER BY yrs_served DESC
+LIMIT 1;
+
+-- 2. Subquery
+#SELECT MAX(yrs_served) FROM mydb.servants
+SELECT
+	servant_name AS Diener,
+    yrs_served AS Dienstzeit,
+    CONCAT(servant_name, " der Diener von ", cat_name, " - ist der Diener mit der längsten Dienstzeit.") AS Dienstzeit
+FROM mydb.cats INNER JOIN mydb.servants
+ON mydb.cats.id = mydb.servants.cats_id
+WHERE yrs_served = (SELECT MAX(yrs_served) FROM mydb.servants);
+
+/* Inner Join 4 / Dienstzeit */
+-- "X - der Diener von Y - ist der Diener mit der längsten Dienstzeit" // MAX()
