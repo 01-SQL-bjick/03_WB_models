@@ -38,3 +38,39 @@ INNER JOIN mydb.servants ON mydb.servants.id = mydb.purchases.servants_id
 INNER JOIN mydb.products ON mydb.products.id = mydb.purchases.products_id
 WHERE servant_name = "Martin"
 ;
+
+-- Wie viel Geld hat Martin ausgegeben?
+SELECT
+	servant_name AS Diener, 				-- organisch
+    COUNT(servant_name) AS Artikelanzahl,	-- aggregiert
+    SUM(product_price) AS Gesamtkosten		-- aggregiert
+From mydb.purchases
+INNER JOIN mydb.servants ON mydb.servants.id = mydb.purchases.servants_id
+INNER JOIN mydb.products ON mydb.products.id = mydb.purchases.products_id
+GROUP BY servant_name
+HAVING servant_name = "Martin"
+;
+
+-- Wer hat das Produkt X gekauft?  
+-- Irgendwas mit Lachs / Irgendwas mit Sauce LIKE
+-- Spalten --> Diener / Produkt
+-- WHERE / LIKE
+SELECT
+	servant_name AS Diener,
+    product_name AS "Irgendwas mit Sauce oder Lachs."
+From mydb.purchases
+INNER JOIN mydb.servants ON mydb.servants.id = mydb.purchases.servants_id
+INNER JOIN mydb.products ON mydb.products.id = mydb.purchases.products_id
+WHERE product_name LIKE "%Lachs" OR product_name LIKE "%Sauce"
+;
+
+-- Wie oft wurde das Produkt X gekauft?
+SELECT
+	product_name AS Produkte,
+    COUNT(product_name) AS Anzahl
+From mydb.purchases
+INNER JOIN mydb.servants ON mydb.servants.id = mydb.purchases.servants_id
+INNER JOIN mydb.products ON mydb.products.id = mydb.purchases.products_id
+GROUP BY product_name
+ORDER BY Anzahl DESC
+;
