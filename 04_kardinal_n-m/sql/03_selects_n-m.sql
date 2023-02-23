@@ -74,3 +74,15 @@ INNER JOIN mydb.products ON mydb.products.id = mydb.purchases.products_id
 GROUP BY product_name
 ORDER BY Anzahl DESC
 ;
+
+-- Welche Umsätze hatte das Produkt X?
+SELECT
+	product_name AS Produkte,
+    COUNT(product_name) AS Anzahl,
+    SUM(product_price) AS Umsätze
+From mydb.purchases
+INNER JOIN mydb.servants ON mydb.servants.id = mydb.purchases.servants_id
+INNER JOIN mydb.products ON mydb.products.id = mydb.purchases.products_id
+GROUP BY product_name
+ORDER BY Umsätze DESC
+;
